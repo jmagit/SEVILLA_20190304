@@ -27,23 +27,30 @@ void pideNombre(Jugador *j) {
 	cout << "Nombre: ";
 	cin >> j->nombre;
 }
-void insertaRecord(Jugador item, Jugador* tabla, int size) {
-	for (int i = 0; i < size; i++) {
-		if ((tabla + i)->record > item.record) {
-			if ((tabla + i)->record != 99)
-				for (int j = size - 1; j > i; j--)
-					*(tabla + j) = *(tabla + j - 1);
-			*(tabla + i) = item;
-			break;
-		}
+Jugador* buscar(Jugador* tabla) {
+	return tabla->siguiente == 0 ? tabla : buscar(tabla->siguiente);
+}
+void insertaRecord(Jugador* item, Jugador** lista) {
+	if (*lista == 0) {
+		*lista = item;
+		return;
+	}
+	if ((*lista)->record > item->record) {
+		item->siguiente = *lista;
+		*lista = item;
+	} else if ((*lista)->siguiente == 0) {
+		(*lista)->siguiente = item;
+	} else {
+		insertaRecord(item, &((*lista)->siguiente));
 	}
 }
-void pintaRecord(Jugador* tabla, int size) {
+void pintaRecord(Jugador* lista) {
 	cout << "TABLA DE RECORDS" << endl;
 	cout << "------------------" << endl;
-	for (int i = 0; i < size; i++) {
-		if ((tabla + i)->record == 99) return;
-		cout << (tabla + i)->nombre << "\t" << (tabla + i)->record << endl;
+	Jugador* actual = lista;
+	while(actual) {
+		cout << actual->nombre << "\t" << actual->record << endl;
+		actual = actual->siguiente;
 	}
 }
 int jugar() {
@@ -79,21 +86,23 @@ int jugar() {
 	}
 	return i;
 }
-void jugar(Jugador* tabla, int size) {
-	Jugador j;
-	pideNombre(&j);
-	j.record = jugar();
-	insertaRecord(j, tabla, size);
+void jugar(Jugador** lista) {
+	Jugador* j = new Jugador;
+	pideNombre(j);
+	//j->record = jugar();
+	j->record = rand() % 10 + 1;
+	cout << "Intentos: " << j->record << endl;
+	insertaRecord(j, lista);
 }
 int main() {
-	Jugador topJugadores[NUM_TOP];
+	Jugador* topJugadores = 0;
 	int opc = pideOpcion();
 	while (opc < 3) {
 		switch (opc) {
 		case 1:
-			jugar(topJugadores, NUM_TOP);
+			jugar(&topJugadores);
 		case 2:
-			pintaRecord(topJugadores, NUM_TOP);
+			pintaRecord(topJugadores);
 			break;
 		}
 		opc = pideOpcion();
