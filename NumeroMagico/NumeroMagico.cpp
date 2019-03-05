@@ -27,23 +27,25 @@ void pideNombre(Jugador *j) {
 	cout << "Nombre: ";
 	cin >> j->nombre;
 }
-void insertaRecord(Jugador item, Jugador* tabla, int size) {
+void insertaRecord(Jugador* item, Jugador** tabla, int size) {
 	for (int i = 0; i < size; i++) {
-		if ((tabla + i)->record > item.record) {
-			if ((tabla + i)->record != 99)
+		if ((*(tabla + i))->record > item->record) {
+			if ((tabla + i) != 0) {
+				delete *(tabla + size - 1);
 				for (int j = size - 1; j > i; j--)
 					*(tabla + j) = *(tabla + j - 1);
+			}
 			*(tabla + i) = item;
 			break;
 		}
 	}
 }
-void pintaRecord(Jugador* tabla, int size) {
+void pintaRecord(Jugador** tabla, int size) {
 	cout << "TABLA DE RECORDS" << endl;
 	cout << "------------------" << endl;
 	for (int i = 0; i < size; i++) {
-		if ((tabla + i)->record == 99) return;
-		cout << (tabla + i)->nombre << "\t" << (tabla + i)->record << endl;
+		if ((tabla + i) == 0) return;
+		cout << (*(tabla + i))->nombre << "\t" << (*(tabla + i))->record << endl;
 	}
 }
 int jugar() {
@@ -80,20 +82,26 @@ int jugar() {
 	return i;
 }
 void jugar(Jugador* tabla, int size) {
-	Jugador j;
-	pideNombre(&j);
-	j.record = jugar();
+	Jugador* j = new Jugador;
+	if (tabla == 0) {
+		tabla = j;
+	} else {
+		x->siguiente = j;
+	}
+	pideNombre(j);
+	j->record = jugar();
 	insertaRecord(j, tabla, size);
 }
 int main() {
-	Jugador topJugadores[NUM_TOP];
+	Jugador* topJugadores = 0;
+	//for (int i = 0; i < NUM_TOP; topJugadores[i++] = 0);
 	int opc = pideOpcion();
 	while (opc < 3) {
 		switch (opc) {
 		case 1:
-			jugar(topJugadores, NUM_TOP);
+			jugar(topJugadores);
 		case 2:
-			pintaRecord(topJugadores, NUM_TOP);
+			pintaRecord(topJugadores);
 			break;
 		}
 		opc = pideOpcion();
