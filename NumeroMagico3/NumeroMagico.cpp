@@ -23,7 +23,7 @@ int pideOpcion() {
 			return *cad - '0';
 	}
 }
-void pideNombre(Jugador *j) {
+void pideDatos(Jugador *j) {
 	cout << "Nombre: ";
 	cin >> j->nombre;
 }
@@ -88,9 +88,12 @@ int jugar() {
 }
 void jugar(Jugador** lista) {
 	Jugador* j = new Jugador;
-	pideNombre(j);
-	//j->record = jugar();
+	pideDatos(j);
+#if _DEBUG
 	j->record = rand() % 10 + 1;
+#else
+	j->record = jugar();
+#endif
 	cout << "Intentos: " << j->record << endl;
 	insertaRecord(j, lista);
 }

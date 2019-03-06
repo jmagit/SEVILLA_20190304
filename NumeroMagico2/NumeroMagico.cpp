@@ -23,7 +23,7 @@ int pideOpcion() {
 			return *cad - '0';
 	}
 }
-void pideNombre(Jugador *j) {
+void pideDatos(Jugador *j) {
 	cout << "Nombre: ";
 	cin >> j->nombre;
 }
@@ -86,7 +86,7 @@ int jugar() {
 }
 void jugar(Jugador** tabla, int size) {
 	Jugador* j = new Jugador;
-	pideNombre(j);
+	pideDatos(j);
 	j->record = jugar();
 	insertaRecord(j, tabla, size);
 }
