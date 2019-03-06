@@ -28,7 +28,7 @@ void pideDatos(Jugador *j) {
 	cin >> j->nombre;
 }
 Jugador* buscar(Jugador* tabla) {
-	return tabla->siguiente == 0 ? tabla : buscar(tabla->siguiente);
+	return tabla == 0 || tabla->siguiente == 0 ? tabla : buscar(tabla->siguiente);
 }
 void insertaRecord(Jugador* item, Jugador** lista) {
 	if (*lista == 0) {
