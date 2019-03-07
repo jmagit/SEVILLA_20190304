@@ -24,4 +24,5 @@ public:
 	Punto3D(int x, int y, int z);
 	~Punto3D();
 	int dameZ();
+	void desplaza(int delta);
 };
